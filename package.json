@@ -1,0 +1,24 @@
+{
+  "name": "PPG-App",
+  "version": "1.0.0",
+  "description": "Paragliding utility app",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackhp95/PPG-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jackhp95/PPG-App/issues"
+  },
+  "homepage": "https://github.com/jackhp95/PPG-App#readme",
+  "dependencies": {
+    "create-elm-app": "^3.2.2",
+    "elm-format": "^0.8.2"
+  }
+}
