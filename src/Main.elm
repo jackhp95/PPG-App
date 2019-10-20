@@ -98,6 +98,7 @@ view model =
                     , placeholder "email@example.com"
                     , class "br0 pl3 tl"
                     , onInput UpdateEmail
+                    , value model.email
                     , required True
                     ]
                     []
