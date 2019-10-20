@@ -3,6 +3,9 @@ module Main exposing (..)
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
+import Http
+import Json.Encode as E
 
 
 
@@ -10,12 +13,12 @@ import Html.Attributes exposing (..)
 
 
 type alias Model =
-    {}
+    { email : String }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { email = "" }, Cmd.none )
 
 
 
@@ -23,12 +26,37 @@ init =
 
 
 type Msg
-    = NoOp
+    = UpdateEmail String
+    | Send
+    | Success (Result Http.Error String)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        UpdateEmail str ->
+            ( { model | email = str }, Cmd.none )
+
+        Success _ ->
+            ( { model | email = "Thank you" }, Cmd.none )
+
+        Send ->
+            if String.isEmpty model.email then
+                ( model, Cmd.none )
+
+            else
+                ( model
+                , Http.post
+                    { url = "https://hooks.zapier.com/hooks/catch/1843357/ou98gn1/"
+                    , body = Http.stringBody "text/plain" model.email
+                    , expect = Http.expectString Success
+
+                    -- , method = "POST"
+                    -- , headers = []
+                    -- , timeout = Nothing
+                    -- , tracker = Nothing
+                    }
+                )
 
 
 
@@ -57,14 +85,28 @@ view model =
                 ]
             , p [ class "tc relative measure-narrow o-60 f3-ns f0 mb5" ]
                 [ text "Leave your email for an invite to our a beta" ]
-            , Html.form [ class "mt4 hover--bg-white bg-white-90 ba b--white bw1 br-pill relative flex overflow-hidden" ]
+            , Html.form
+                [ class
+                    "mt4 hover--bg-white bg-white-90 ba b--white bw1 br-pill relative flex overflow-hidden"
+
+                --, method "POST"
+                -- , action "https://hooks.zapier.com/hooks/catch/1843357/ou98gn1/"
+                ]
                 [ input
                     [ type_ "email"
+                    , name "email"
                     , placeholder "email@example.com"
-                    , class "br0 pl2"
+                    , class "br0 pl3 tl"
+                    , onInput UpdateEmail
+                    , required True
                     ]
                     []
-                , button [ class "bg-orange white grow nr2 pr4 pl3" ] [ text "Send" ]
+                , button
+                    [ class "bg-orange white grow nr2 pr4 pl3"
+                    , type_ "button"
+                    , onClick Send
+                    ]
+                    [ text "Send" ]
                 ]
             , p [ class "glow relative mt2 mb4 measure black o-40 f7 tc bg-white pv1 ph3 br-pill" ]
                 [ text "You will not be spammed." ]
@@ -73,6 +115,7 @@ view model =
             |> List.map toCard
             |> (\x -> x ++ [ div [ class "pa3" ] [] ])
             |> ul [ class "flex overflow-x-auto relative nt5 pv4 w-100" ]
+        , footer [ class "mt4 bg-black-10 black-50 tc self-stretch pv3" ] [ text "copyright ©2019 safeskies.co" ]
         ]
 
 
