@@ -71,25 +71,26 @@ view model =
             ]
         , cards
             |> List.map toCard
-            |> (\x -> x ++ [ div [ class "pa2" ] [] ])
+            |> (\x -> x ++ [ div [ class "pa3" ] [] ])
             |> ul [ class "flex overflow-x-auto relative nt5 pv4 w-100" ]
         ]
 
 
 toCard : Card -> Html Msg
-toCard { features, city } =
+toCard { features, city, phrase } =
     article
-        [ class "flex-none bg-white br4 ml4 shadow-4 overflow-hidden grow"
+        [ class "flex-none bg-blue br4 ml4 shadow-4 overflow-hidden grow white ba"
         , style "max-width" "80vw"
+        , style "background-image" "url('windmap.png')"
         ]
         [ header [ class "flex justify-between ph3 pv2" ]
-            [ h1 [ class "o-80 f5 fw5" ]
+            [ h1 [ class "f5 fw7" ]
                 [ text <| city ++ ", Missouri"
                 ]
-            , address [ class "dn ml5 f7 o-20 nr1 flex-ns items-center" ]
+            , address [ class "dn ml5 f7 nr1 flex-ns items-center" ]
                 [ text "38.9515, -92.3285"
                 , img
-                    [ src "https://icongr.am/clarity/crosshairs.svg"
+                    [ src "https://icongr.am/clarity/crosshairs.svg?color=ffffff"
                     , alt "Location tag"
                     , class "ml1"
                     , style "height" "1.5em"
@@ -99,19 +100,25 @@ toCard { features, city } =
                 ]
             ]
         , section
-            [ class "bg-blue pa2 white"
-            , style "background-image" "url('windmap.png')"
+            [ class "pa2"
             ]
-            [ h2 [ class "f1 fw7 mw5 lh-solid pt5 pr4 pa2" ] [ text "It's Safe to Fly" ]
+            [ h2 [ class "f1 fw7 mw5 lh-solid pt5 pr4 pa2" ] [ text phrase ]
             , features
                 |> List.map
                     (\( title, emoji, measure ) ->
                         li
-                            [ class "bg-white ma1 ma2-ns pv2 ph3 br3 black"
+                            [ class "hover-bg-orange white ma1 ma2-ns pv2 ph3 br3 ba b--white-60"
                             , class "flex-auto flex flex-column-ns items-center"
                             ]
-                            [ object [ class "f3" ] [ text emoji ]
-                            , h3 [ class "flex-auto mh2 mh0-ns" ] [ text title ]
+                            [ img
+                                [ src <| "https://icongr.am/clarity/" ++ emoji ++ ".svg?color=ffffff"
+                                , alt "Location tag"
+                                , class "ml1"
+                                , style "height" "1.5em"
+                                , style "width" "1.5em"
+                                ]
+                                []
+                            , h3 [ class "dn-ns flex-auto mh2 mh0-ns" ] [ text title ]
                             , p [ class "" ] [ text measure ]
                             ]
                     )
@@ -122,6 +129,7 @@ toCard { features, city } =
 
 type alias Card =
     { city : String
+    , phrase : String
     , features : List ( String, String, String )
     }
 
@@ -129,27 +137,30 @@ type alias Card =
 cards : List Card
 cards =
     [ { city = "Columbia"
+      , phrase = "It's Cold, but Safe"
       , features =
-            [ ( "wind", "💨", "3mph" )
-            , ( "legal", "💨", "Typical" )
-            , ( "turbulance", "💨", "1g" )
-            , ( "temp", "💨", "70f" )
+            [ ( "wind", "radar", "3mph" )
+            , ( "storm", "bolt", "0%" )
+            , ( "turbulance", "nvme", "none" )
+            , ( "temp", "thermometer", "52f" )
             ]
       }
     , { city = "Kansas City"
+      , phrase = "It's Turbulant."
       , features =
-            [ ( "wind", "💨", "3mph" )
-            , ( "legal", "💨", "Typical" )
-            , ( "turbulance", "💨", "1g" )
-            , ( "temp", "💨", "70f" )
+            [ ( "wind", "radar", "25mph" )
+            , ( "storm", "bolt", "10%" )
+            , ( "turbulance", "nvme", "8tke" )
+            , ( "temp", "thermometer", "83f" )
             ]
       }
     , { city = "Lake of the Ozarks"
+      , phrase = "It's Safe to Fly"
       , features =
-            [ ( "wind", "💨", "3mph" )
-            , ( "legal", "💨", "Typical" )
-            , ( "turbulance", "💨", "1g" )
-            , ( "temp", "💨", "70f" )
+            [ ( "wind", "radar", "3mph" )
+            , ( "storm", "bolt", "2%" )
+            , ( "turbulance", "nvme", "1tke" )
+            , ( "temp", "thermometer", "71f" )
             ]
       }
     ]

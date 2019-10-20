@@ -3,7 +3,7 @@
   "name": "Create Elm App Sample",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "https://icongr.am/clarity/crosshairs.png?color=ffffff?size=192",
       "sizes": "192x192",
       "type": "image/png"
     }
